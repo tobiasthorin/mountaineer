@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/mountain"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -11,5 +12,102 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.mountineer.mountaineer.MainActivity"
     tools:showIn="@layout/activity_main">
+
+
+    <TextView
+        android:id="@+id/txtAltitudeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/altitudeLabel"
+        android:textColor="@color/darkText" />
+
+    <TextView
+        android:id="@+id/txtAltitudeValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtAltitudeLabel"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:text="35"
+        android:textColor="@color/lightText"
+        android:textSize="120sp" />
+
+    <TextView
+        android:id="@+id/txtMetersAboveSeaLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtAltitudeValue"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/aboveSeaLevelLabel"
+        android:textColor="@color/darkText" />
+
+    <LinearLayout
+        android:id="@+id/llLongitudeWrapper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtMetersAboveSeaLabel"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/txtLongitudeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/longitudeLabel"
+            android:textColor="@color/lightText"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/txtLongitudeValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:text="76.948623"
+            android:textColor="@color/lightText"
+            android:textSize="18sp"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llLatitudeWrapper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/llLongitudeWrapper"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/txtLatitudeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/latitudeLabel"
+            android:textColor="@color/lightText"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/txtLatitudeValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:text="35.573837"
+            android:textColor="@color/lightText"
+            android:textSize="18sp"/>
+
+
+    </LinearLayout>
+
 
 </RelativeLayout>
