@@ -7,28 +7,25 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.List;
-import java.util.jar.Manifest;
+import com.mountineer.mountaineer.service.ElevationServiceCallback;
+import com.mountineer.mountaineer.service.GoogleElevationService;
 
-public class MainActivity extends AppCompatActivity implements LocationListener {
+public class MainActivity extends AppCompatActivity implements LocationListener, ElevationServiceCallback {
 
     //Private variables
     private TextView txtLongitude;
     private TextView txtLatitude;
+    private TextView txtElevation;
     private LocationManager locationManager;
     private String provider;
+    private GoogleElevationService googleElevationService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +37,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         //Get the views
         txtLatitude = (TextView) findViewById(R.id.txtLatitudeValue);
         txtLongitude = (TextView) findViewById(R.id.txtLongitudeValue);
+        txtElevation = (TextView) findViewById(R.id.txtAltitudeValue);
+
+        googleElevationService = new GoogleElevationService(this);
 
         //See if we have permission to access location, otherwise ask.
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -58,17 +58,20 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         Location location = locationManager.getLastKnownLocation(provider);
 
-        updateCoordinates(location);
+        //Update interface
+        updateLocation(location);
 
     }
 
     //Updates the text fields in the main interface
-    private void updateCoordinates(Location location) {
+    private void updateLocation(Location location) {
         double lat = location.getLatitude();
         double lng = location.getLongitude();
 
         txtLatitude.setText(String.valueOf(lat));
         txtLongitude.setText(String.valueOf(lng));
+
+        googleElevationService.refreshLocation(lat, lng);
     }
 
     @Override
@@ -112,5 +115,20 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     @Override
     public void onProviderDisabled(String provider) {
         Toast.makeText(this, "Disabled provider: " + provider, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void serviceSuccess(Double elevation) {
+
+        //Round it off, for beauty
+        int displayValue = (int)Math.round(elevation);
+
+        //Set the text
+        txtElevation.setText(String.valueOf(displayValue));
+    }
+
+    @Override
+    public void serviceFailure(Exception e) {
+        e.printStackTrace();
     }
 }

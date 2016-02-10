@@ -34,7 +34,7 @@
         android:layout_below="@id/txtAltitudeLabel"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
-        android:text="35"
+        android:text="@string/notAvailable"
         android:layout_marginTop="-10dp"
         android:textColor="@color/lightText"
         android:textSize="120sp" />
@@ -76,7 +76,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
-            android:text="76.948623"
+            android:text="@string/notAvailable"
             android:textColor="@color/lightText"
             android:textSize="18sp" />
 
@@ -108,7 +108,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
-            android:text="35.573837"
+            android:text="@string/notAvailable"
             android:textColor="@color/lightText"
             android:textSize="18sp" />
 
