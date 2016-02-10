@@ -11,7 +11,8 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.mountineer.mountaineer.MainActivity"
-    tools:showIn="@layout/activity_main">
+    tools:showIn="@layout/activity_main"
+    android:padding="0dp">
 
 
     <TextView
@@ -22,7 +23,9 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:text="@string/altitudeLabel"
-        android:textColor="@color/darkText" />
+        android:textColor="@color/darkText"
+        android:textSize="20sp"
+        android:layout_marginTop="20dp" />
 
     <TextView
         android:id="@+id/txtAltitudeValue"
@@ -32,6 +35,7 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:text="35"
+        android:layout_marginTop="-10dp"
         android:textColor="@color/lightText"
         android:textSize="120sp" />
 
@@ -42,6 +46,8 @@
         android:layout_below="@id/txtAltitudeValue"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="-15dp"
+        android:textSize="20sp"
         android:text="@string/aboveSeaLevelLabel"
         android:textColor="@color/darkText" />
 
@@ -61,7 +67,7 @@
             android:layout_gravity="center_horizontal"
             android:text="@string/longitudeLabel"
             android:textColor="@color/lightText"
-            android:textSize="18sp"/>
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/txtLongitudeValue"
@@ -72,7 +78,7 @@
             android:layout_marginStart="10dp"
             android:text="76.948623"
             android:textColor="@color/lightText"
-            android:textSize="18sp"/>
+            android:textSize="18sp" />
 
 
     </LinearLayout>
@@ -93,7 +99,7 @@
             android:layout_gravity="center_horizontal"
             android:text="@string/latitudeLabel"
             android:textColor="@color/lightText"
-            android:textSize="18sp"/>
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/txtLatitudeValue"
@@ -104,9 +110,33 @@
             android:layout_marginStart="10dp"
             android:text="35.573837"
             android:textColor="@color/lightText"
-            android:textSize="18sp"/>
+            android:textSize="18sp" />
 
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/llButtonWrapper"
+        android:gravity="center_horizontal"
+        android:padding="20dp"
+        android:background="@color/darkTransparent">
+
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="@string/saveLocationButtonText"
+            android:id="@+id/btnSaveLocation" />
+
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="@string/historyButtonText"
+            android:id="@+id/btnHistory" />
     </LinearLayout>
 
 
