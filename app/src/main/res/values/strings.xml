@@ -8,4 +8,6 @@
     <string name="saveLocationButtonText">Save Location</string>
     <string name="historyButtonText">View History</string>
     <string name="notAvailable">N/A</string>
+    <string name="refreshText">refresh</string>
+    <string name="infoText">info</string>
 </resources>

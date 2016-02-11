@@ -16,6 +16,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +32,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     private TextView txtLongitude;
     private TextView txtLatitude;
     private TextView txtElevation;
+    private ImageView imgRefresh;
+    private ImageView imgInfo;
+
     private LocationManager locationManager;
     private String provider;
     private GoogleElevationService googleElevationService;
@@ -46,6 +51,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         txtLatitude = (TextView) findViewById(R.id.txtLatitudeValue);
         txtLongitude = (TextView) findViewById(R.id.txtLongitudeValue);
         txtElevation = (TextView) findViewById(R.id.txtAltitudeValue);
+        imgRefresh = (ImageView) findViewById(R.id.imgRefresh);
+        imgInfo = (ImageView) findViewById(R.id.imgInfo);
 
         //Get location manager
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -73,6 +80,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         } else {
             updateLocationAndElevation();
         }
+
+        //Button functionality
+        imgRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateLocationAndElevation();
+                Toast.makeText(getApplicationContext(), "updated", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 

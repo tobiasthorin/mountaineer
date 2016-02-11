@@ -124,7 +124,8 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:src="@drawable/clockwise11"
-        android:tint="#ffffff" />
+        android:tint="@color/lightText"
+        android:contentDescription="@string/refreshText" />
 
     <ImageView
         android:id="@+id/imgInfo"
@@ -134,7 +135,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:src="@drawable/info34"
-        android:tint="#ffffff" />
+        android:tint="@color/lightText"
+        android:contentDescription="@string/infoText" />
 
     <Button
         android:id="@+id/btnHistory"
