@@ -1,14 +1,19 @@
 package com.mountineer.mountaineer;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -19,6 +24,8 @@ import com.mountineer.mountaineer.service.GoogleElevationService;
 
 public class MainActivity extends AppCompatActivity implements LocationListener, ElevationServiceCallback {
 
+    private static final int LOCATION_REQUEST_CODE = 1;
+
     //Private variables
     private TextView txtLongitude;
     private TextView txtLatitude;
@@ -26,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     private LocationManager locationManager;
     private String provider;
     private GoogleElevationService googleElevationService;
+    private Location currentLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,38 +47,57 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         txtLongitude = (TextView) findViewById(R.id.txtLongitudeValue);
         txtElevation = (TextView) findViewById(R.id.txtAltitudeValue);
 
-        googleElevationService = new GoogleElevationService(this);
-
-        //See if we have permission to access location, otherwise ask.
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}, 99);
-        }
-
         //Get location manager
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        //Set provider criteria (Default) and get location
-        Criteria criteria = new Criteria();
+        //Request location for both network and gps
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
-        provider = locationManager.getBestProvider(criteria, false);
+        //Create an elevation service
+        googleElevationService = new GoogleElevationService(this);
 
-        Location location = locationManager.getLastKnownLocation(provider);
+        int permissionCheckFine = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        int permissionCheckCoarse = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
 
-        //Update interface
-        updateLocation(location);
+        //For new android, we need to ask for permissions here
+        if (Build.VERSION.SDK_INT >= 23) {
+            //Do we already have permission?
+            if (permissionCheckFine != PackageManager.PERMISSION_GRANTED && permissionCheckCoarse != PackageManager.PERMISSION_GRANTED) {
+                //If not, request it!
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
 
+            } else {
+                updateLocationAndElevation();
+            }
+        } else {
+            updateLocationAndElevation();
+        }
     }
 
+
     //Updates the text fields in the main interface
-    private void updateLocation(Location location) {
-        double lat = location.getLatitude();
-        double lng = location.getLongitude();
+    private void updateLocationAndElevation() {
+
+
+
+        try {
+            //Set a criteria (default) for choosing provider, then get the location!
+            Criteria criteria = new Criteria();
+            provider = locationManager.getBestProvider(criteria, false);
+            currentLocation = locationManager.getLastKnownLocation(provider);
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
+
+        //Set location fields
+        double lat = currentLocation.getLatitude();
+        double lng = currentLocation.getLongitude();
 
         txtLatitude.setText(String.valueOf(lat));
         txtLongitude.setText(String.valueOf(lng));
 
+        //Do elevation call
         googleElevationService.refreshLocation(lat, lng);
     }
 
@@ -98,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     @Override
     public void onLocationChanged(Location location) {
-
+        currentLocation = location;
     }
 
     @Override
@@ -121,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     public void serviceSuccess(Double elevation) {
 
         //Round it off, for beauty
-        int displayValue = (int)Math.round(elevation);
+        int displayValue = (int) Math.round(elevation);
 
         //Set the text
         txtElevation.setText(String.valueOf(displayValue));
@@ -129,6 +156,26 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     @Override
     public void serviceFailure(Exception e) {
-        e.printStackTrace();
+        showMessage("Error", e.getMessage());
+    }
+
+    private void showMessage(String title, String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.setCancelable(true);
+        builder.show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode){
+            case LOCATION_REQUEST_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    updateLocationAndElevation();
+                } else {
+                    Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show();
+                }
+        }
     }
 }
