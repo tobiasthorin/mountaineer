@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/mountain"
+    android:padding="10dp"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.mountineer.mountaineer.MainActivity"
-    tools:showIn="@layout/activity_main"
-    android:padding="0dp">
+    tools:showIn="@layout/activity_main">
 
 
     <TextView
@@ -22,10 +22,10 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
         android:text="@string/altitudeLabel"
         android:textColor="@color/darkText"
-        android:textSize="20sp"
-        android:layout_marginTop="20dp" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/txtAltitudeValue"
@@ -34,8 +34,8 @@
         android:layout_below="@id/txtAltitudeLabel"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
-        android:text="@string/notAvailable"
         android:layout_marginTop="-10dp"
+        android:text="@string/notAvailable"
         android:textColor="@color/lightText"
         android:textSize="120sp" />
 
@@ -47,9 +47,9 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="-15dp"
-        android:textSize="20sp"
         android:text="@string/aboveSeaLevelLabel"
-        android:textColor="@color/darkText" />
+        android:textColor="@color/darkText"
+        android:textSize="20sp" />
 
     <LinearLayout
         android:id="@+id/llLongitudeWrapper"
@@ -92,6 +92,7 @@
         android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
+
         <TextView
             android:id="@+id/txtLatitudeLabel"
             android:layout_width="wrap_content"
@@ -115,29 +116,41 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/imgRefresh"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/clockwise11"
+        android:tint="#ffffff" />
+
+    <ImageView
+        android:id="@+id/imgInfo"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/info34"
+        android:tint="#ffffff" />
+
+    <Button
+        android:id="@+id/btnHistory"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/llButtonWrapper"
-        android:gravity="center_horizontal"
-        android:padding="20dp"
-        android:background="@color/darkTransparent">
+        android:text="@string/historyButtonText" />
 
-        <Button
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:text="@string/saveLocationButtonText"
-            android:id="@+id/btnSaveLocation" />
-
-        <Button
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:text="@string/historyButtonText"
-            android:id="@+id/btnHistory" />
-    </LinearLayout>
+    <Button
+        android:id="@+id/btnSaveLocation"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/btnHistory"
+        android:layout_centerHorizontal="true"
+        android:text="@string/saveLocationButtonText" />
 
 
 </RelativeLayout>
