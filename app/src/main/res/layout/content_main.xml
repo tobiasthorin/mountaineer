@@ -16,14 +16,14 @@
 
 
     <TextView
-        android:id="@+id/txtAltitudeLabel"
+        android:id="@+id/txtLocationValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
-        android:text="@string/altitudeLabel"
+        android:text="@string/notAvailable"
         android:textColor="@color/darkText"
         android:textSize="20sp" />
 
@@ -31,7 +31,7 @@
         android:id="@+id/txtAltitudeValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/txtAltitudeLabel"
+        android:layout_below="@id/txtLocationValue"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="-10dp"

@@ -1,7 +1,6 @@
 package com.mountineer.mountaineer;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,7 +13,6 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,10 +20,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mountineer.mountaineer.service.ElevationServiceCallback;
 import com.mountineer.mountaineer.service.GoogleElevationService;
 
-public class MainActivity extends AppCompatActivity implements LocationListener, ElevationServiceCallback {
+public class MainActivity extends AppCompatActivity implements LocationListener {
 
     private static final int LOCATION_REQUEST_CODE = 1;
 
@@ -33,12 +30,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     private TextView txtLongitude;
     private TextView txtLatitude;
     private TextView txtElevation;
+    private TextView txtLocation;
     private ImageView imgRefresh;
     private ImageView imgInfo;
 
     private LocationManager locationManager;
     private String provider;
     private GoogleElevationService googleElevationService;
+    private ElevationServiceHandler elevationServiceHandler;
     private Location currentLocation;
 
     @Override
@@ -52,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         txtLatitude = (TextView) findViewById(R.id.txtLatitudeValue);
         txtLongitude = (TextView) findViewById(R.id.txtLongitudeValue);
         txtElevation = (TextView) findViewById(R.id.txtAltitudeValue);
+        txtLocation = (TextView) findViewById(R.id.txtLocationValue);
         imgRefresh = (ImageView) findViewById(R.id.imgRefresh);
         imgInfo = (ImageView) findViewById(R.id.imgInfo);
 
@@ -63,7 +63,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
         //Create an elevation service
-        googleElevationService = new GoogleElevationService(this);
+        elevationServiceHandler = new ElevationServiceHandler(getApplicationContext(), txtElevation);
+        googleElevationService = new GoogleElevationService(elevationServiceHandler);
 
         int permissionCheckFine = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
         int permissionCheckCoarse = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
@@ -167,29 +168,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     @Override
     public void onProviderDisabled(String provider) {
         Toast.makeText(this, "Disabled provider: " + provider, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void serviceSuccess(Double elevation) {
-
-        //Round it off, for beauty
-        int displayValue = (int) Math.round(elevation);
-
-        //Set the text
-        txtElevation.setText(String.valueOf(displayValue));
-    }
-
-    @Override
-    public void serviceFailure(Exception e) {
-        showMessage("Error", e.getMessage());
-    }
-
-    private void showMessage(String title, String message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(title);
-        builder.setMessage(message);
-        builder.setCancelable(true);
-        builder.show();
     }
 
     @Override
