@@ -20,7 +20,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mountineer.mountaineer.service.GoogleElevationService;
+import com.mountineer.mountaineer.service.ApiService;
+import com.mountineer.mountaineer.service.ElevationServiceCallback;
+import com.mountineer.mountaineer.service.LocationServiceCallback;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
 
@@ -36,8 +38,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     private LocationManager locationManager;
     private String provider;
-    private GoogleElevationService googleElevationService;
-    private ElevationServiceHandler elevationServiceHandler;
+    private ApiService elevationApiService;
+    private ApiService locationApiService;
+    private ElevationServiceCallback elevationServiceCallback;
+    private LocationServiceCallback locationServiceCallback;
     private Location currentLocation;
 
     @Override
@@ -62,9 +66,18 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
-        //Create an elevation service
-        elevationServiceHandler = new ElevationServiceHandler(getApplicationContext(), txtElevation);
-        googleElevationService = new GoogleElevationService(elevationServiceHandler);
+        //Create urls for api calls
+        String elevationUrl = "https://maps.googleapis.com/maps/api/elevation/json?locations=%s,%s&key=%s";
+        String locationUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng=%s,%s&key=%s";
+
+        //Create elevation service
+        elevationServiceCallback = new ElevationServiceCallback(this, txtElevation);
+        elevationApiService = new ApiService(elevationServiceCallback, elevationUrl);
+
+        //Create location service
+        locationServiceCallback = new LocationServiceCallback(this, txtLocation);
+        locationApiService = new ApiService(locationServiceCallback, locationUrl);
+
 
         int permissionCheckFine = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
         int permissionCheckCoarse = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
@@ -123,8 +136,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         txtLatitude.setText(String.valueOf(lat));
         txtLongitude.setText(String.valueOf(lng));
 
-        //Do elevation call
-        googleElevationService.refreshLocation(lat, lng);
+        //Do api calls
+        elevationApiService.refreshLocation(lat, lng);
+        locationApiService.refreshLocation(lat, lng);
     }
 
     @Override

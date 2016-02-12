@@ -24,7 +24,7 @@
         </activity>
 
         <service
-            android:name=".service.GoogleElevationService"
+            android:name=".service.ApiService"
             android:enabled="true"
             android:exported="true" />
 

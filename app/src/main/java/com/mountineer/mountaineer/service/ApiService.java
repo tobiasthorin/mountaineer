@@ -20,14 +20,16 @@ import java.net.URLConnection;
 /**
  * Created by Tobias on 10/02/16.
  */
-public class GoogleElevationService extends Service {
+public class ApiService extends Service {
 
     private static final String API_KEY = "AIzaSyCYW9c5zsJXv6Ep6_cHehji-GSEP0xq1Vk";
     private Exception error;
-    private ElevationServiceCallback callback;
+    private ServiceCallback callback;
+    private String url;
 
-    public GoogleElevationService(ElevationServiceCallback callback) {
+    public ApiService(ServiceCallback callback, String url) {
         this.callback = callback;
+        this.url = url;
     }
 
     @Nullable
@@ -45,7 +47,8 @@ public class GoogleElevationService extends Service {
             protected String doInBackground(Double... params) {
 
                 //Specify the query for Google
-                String endpoint = String.format("https://maps.googleapis.com/maps/api/elevation/json?locations=%s,%s&key=%s", latitude, longitude, API_KEY);
+                //String endpoint = String.format("https://maps.googleapis.com/maps/api/elevation/json?locations=%s,%s&key=%s", latitude, longitude, API_KEY);
+                String endpoint = String.format(url, latitude, longitude, API_KEY);
 
                 try {
                     //Establish the connection
@@ -89,11 +92,8 @@ public class GoogleElevationService extends Service {
                 try {
                     JSONObject data = new JSONObject(s);
 
-                    //Find the right value
-                    Double returnValue = data.optJSONArray("results").optJSONObject(0).optDouble("elevation");
-
                     //And back we go
-                    callback.serviceSuccess(returnValue);
+                    callback.serviceSuccess(data);
 
                 } catch (JSONException e) {
                     callback.serviceFailure(e);

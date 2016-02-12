@@ -1,30 +1,20 @@
-package com.mountineer.mountaineer;
+package com.mountineer.mountaineer.service;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.widget.TextView;
 
-import com.mountineer.mountaineer.service.ElevationServiceCallback;
-
 /**
  * Created by Tobias on 12/02/16.
  */
-public class ElevationServiceHandler implements ElevationServiceCallback {
+public abstract class GenericServiceCallback implements ServiceCallback {
 
-    private TextView view;
-    private Context context;
+    protected TextView view;
+    protected Context context;
 
-    public ElevationServiceHandler(Context context, TextView view) {
+    public GenericServiceCallback(Context context, TextView view) {
         this.view = view;
-    }
-
-    @Override
-    public void serviceSuccess(Double elevation) {
-        //Round it off, for beauty
-        int displayValue = (int) Math.round(elevation);
-
-        //Set the texts
-        view.setText(String.valueOf(displayValue));
+        this.context = context;
     }
 
     @Override
@@ -32,6 +22,7 @@ public class ElevationServiceHandler implements ElevationServiceCallback {
         showMessage("Error", e.getMessage());
     }
 
+    //makes an error message with title and message
     private void showMessage(String title, String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(title);
