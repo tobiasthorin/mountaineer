@@ -10,4 +10,5 @@
     <string name="notAvailable">N/A</string>
     <string name="refreshText">refresh</string>
     <string name="infoText">info</string>
+    <string name="title_activity_info">InfoActivity</string>
 </resources>

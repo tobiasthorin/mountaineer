@@ -118,23 +118,23 @@
 
     <ImageView
         android:id="@+id/imgRefresh"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:src="@drawable/clockwise11"
+        android:src="@drawable/ic_refresh_white_24dp"
         android:tint="@color/lightText"
         android:contentDescription="@string/refreshText" />
 
     <ImageView
         android:id="@+id/imgInfo"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:src="@drawable/info34"
+        android:src="@drawable/ic_info_white_24dp"
         android:tint="@color/lightText"
         android:contentDescription="@string/infoText" />
 

@@ -3,6 +3,7 @@ package com.mountineer.mountaineer;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
@@ -87,6 +88,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             public void onClick(View v) {
                 updateLocationAndElevation();
                 Toast.makeText(getApplicationContext(), "updated", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        imgInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent infoIntent = new Intent(getApplicationContext(), InfoActivity.class);
+                startActivity(infoIntent);
             }
         });
     }
