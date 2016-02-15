@@ -12,7 +12,9 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.mountineer.mountaineer.MainActivity"
-    tools:showIn="@layout/activity_main">
+    tools:showIn="@layout/activity_main"
+    android:backgroundTint="#d09bff"
+    android:backgroundTintMode="multiply">
 
 
     <TextView
