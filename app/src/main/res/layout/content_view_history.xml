@@ -12,14 +12,16 @@
     tools:context="com.mountineer.mountaineer.ViewHistoryActivity"
     tools:showIn="@layout/activity_view_history"
     android:orientation="vertical"
-    android:background="@drawable/mountain">
+    android:background="@drawable/mountain"
+    android:backgroundTintMode="multiply"
+    android:backgroundTint="#719c7f">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="History"
         android:textSize="30sp"
-        android:textColor="@color/darkText"/>
+        android:textColor="@color/lightText"/>
 
     <ListView
         android:layout_width="match_parent"

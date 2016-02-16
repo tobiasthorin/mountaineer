@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#ffffff">
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp">
 
         <LinearLayout
             android:orientation="vertical"
@@ -15,18 +16,18 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Medium Text"
-                android:id="@+id/txtHistoryDate"
-                android:textColor="@color/darkText"
-                android:textSize="20sp" />
+                android:id="@+id/txtHistoryLocation"
+                android:textSize="18sp"
+                android:textColor="@color/lightText" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Medium Text"
-                android:id="@+id/txtHistoryLocation"
-                android:textSize="18sp"
-                android:textColor="@color/darkText" />
+                android:id="@+id/txtHistoryDate"
+                android:textColor="@color/lightSubText"
+                android:textSize="18sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -42,7 +43,7 @@
                 android:id="@+id/txtHistoryAltitude"
                 android:layout_weight="0"
                 android:textSize="40sp"
-                android:textColor="@color/darkText" />
+                android:textColor="@color/lightText" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -50,6 +51,6 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="m"
                 android:id="@+id/txtHistoryMeterLabel"
-                android:textColor="@color/darkText" />
+                android:textColor="@color/lightSubText" />
         </LinearLayout>
 </LinearLayout>

@@ -70,6 +70,20 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         btnViewHistory = (Button) findViewById(R.id.btnHistory);
         btnSaveLocation = (Button) findViewById(R.id.btnSaveLocation);
 
+        int permissionCheckFine = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        int permissionCheckCoarse = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+
+        //For new android, we need to ask for permissions here
+        if (Build.VERSION.SDK_INT >= 23) {
+            //Do we already have permission?
+            if (permissionCheckFine != PackageManager.PERMISSION_GRANTED && permissionCheckCoarse != PackageManager.PERMISSION_GRANTED) {
+                //If not, request it!
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
+            }
+        }
+
+
+
         //Get location manager
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -89,23 +103,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         locationServiceCallback = new LocationServiceCallback(this, txtLocation);
         locationApiService = new ApiService(locationServiceCallback, locationUrl);
 
+        updateLocationAndElevation();
 
-        int permissionCheckFine = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-        int permissionCheckCoarse = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
-
-        //For new android, we need to ask for permissions here
-        if (Build.VERSION.SDK_INT >= 23) {
-            //Do we already have permission?
-            if (permissionCheckFine != PackageManager.PERMISSION_GRANTED && permissionCheckCoarse != PackageManager.PERMISSION_GRANTED) {
-                //If not, request it!
-                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
-
-            } else {
-                updateLocationAndElevation();
-            }
-        } else {
-            updateLocationAndElevation();
-        }
 
         //Do a database
         databaseHelper = new DatabaseHelper(getApplicationContext());

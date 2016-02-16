@@ -6,4 +6,5 @@
     <color name="darkText">#000000</color>
     <color name="lightText">#ffffff</color>
     <color name="darkTransparent">#7f000000</color>
+    <color name="lightSubText">#cccccc</color>
 </resources>
