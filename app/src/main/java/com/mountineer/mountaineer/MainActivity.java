@@ -79,32 +79,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             if (permissionCheckFine != PackageManager.PERMISSION_GRANTED && permissionCheckCoarse != PackageManager.PERMISSION_GRANTED) {
                 //If not, request it!
                 ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
+            } else {
+                setUpServices();
             }
+        } else {
+            setUpServices();
         }
-
-
-
-        //Get location manager
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-        //Request location for both network and gps
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-
-        //Create urls for api calls
-        String elevationUrl = "https://maps.googleapis.com/maps/api/elevation/json?locations=%s,%s&key=%s";
-        String locationUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng=%s,%s&key=%s";
-
-        //Create elevation service
-        elevationServiceCallback = new ElevationServiceCallback(this, txtElevation);
-        elevationApiService = new ApiService(elevationServiceCallback, elevationUrl);
-
-        //Create location service
-        locationServiceCallback = new LocationServiceCallback(this, txtLocation);
-        locationApiService = new ApiService(locationServiceCallback, locationUrl);
-
-        updateLocationAndElevation();
-
 
         //Do a database
         databaseHelper = new DatabaseHelper(getApplicationContext());
@@ -150,6 +130,34 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 }
             }
         });
+    }
+
+    private void setUpServices() {
+
+        //Get location manager
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        //Request location for both network and gps
+        try {
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
+
+        //Create urls for api calls
+        String elevationUrl = "https://maps.googleapis.com/maps/api/elevation/json?locations=%s,%s&key=%s";
+        String locationUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng=%s,%s&key=%s";
+
+        //Create elevation service
+        elevationServiceCallback = new ElevationServiceCallback(this, txtElevation);
+        elevationApiService = new ApiService(elevationServiceCallback, elevationUrl);
+
+        //Create location service
+        locationServiceCallback = new LocationServiceCallback(this, txtLocation);
+        locationApiService = new ApiService(locationServiceCallback, locationUrl);
+
+        updateLocationAndElevation();
     }
 
     private String findCurrentDate() {
@@ -237,10 +245,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         switch (requestCode) {
             case LOCATION_REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    updateLocationAndElevation();
+                    setUpServices();
                 } else {
                     Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show();
                 }
         }
     }
+
+
 }
