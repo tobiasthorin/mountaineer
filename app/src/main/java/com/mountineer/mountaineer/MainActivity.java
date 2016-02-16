@@ -16,13 +16,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mountineer.mountaineer.database.DatabaseHelper;
 import com.mountineer.mountaineer.service.ApiService;
 import com.mountineer.mountaineer.service.ElevationServiceCallback;
 import com.mountineer.mountaineer.service.LocationServiceCallback;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
 
@@ -35,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private TextView txtLocation;
     private ImageView imgRefresh;
     private ImageView imgInfo;
+    private Button btnViewHistory;
+    private Button btnSaveLocation;
 
     private LocationManager locationManager;
     private String provider;
@@ -43,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private ElevationServiceCallback elevationServiceCallback;
     private LocationServiceCallback locationServiceCallback;
     private Location currentLocation;
+
+    private DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +67,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         txtLocation = (TextView) findViewById(R.id.txtLocationValue);
         imgRefresh = (ImageView) findViewById(R.id.imgRefresh);
         imgInfo = (ImageView) findViewById(R.id.imgInfo);
+        btnViewHistory = (Button) findViewById(R.id.btnHistory);
+        btnSaveLocation = (Button) findViewById(R.id.btnSaveLocation);
 
         //Get location manager
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -96,6 +107,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             updateLocationAndElevation();
         }
 
+        //Do a database
+        databaseHelper = new DatabaseHelper(getApplicationContext());
+
         //Button functionality
         imgRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,12 +126,47 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 startActivity(infoIntent);
             }
         });
+
+        btnViewHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent historyIntent = new Intent(getApplicationContext(), ViewHistoryActivity.class);
+                startActivity(historyIntent);
+            }
+        });
+
+        btnSaveLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String date = findCurrentDate();
+                String location = txtLocation.getText().toString();
+                String altitude = txtElevation.getText().toString();
+
+                Boolean isInsert = databaseHelper.insertData(date, location, altitude);
+
+                if (isInsert) {
+                    Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private String findCurrentDate() {
+        //Get current time
+        Calendar now = Calendar.getInstance();
+
+        //Format the date
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        //Return formatted string
+        return dateFormat.format(now.getTime());
     }
 
 
     //Updates the text fields in the main interface
     private void updateLocationAndElevation() {
-
 
 
         try {
@@ -186,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode){
+        switch (requestCode) {
             case LOCATION_REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     updateLocationAndElevation();

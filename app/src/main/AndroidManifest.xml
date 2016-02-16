@@ -31,6 +31,10 @@
         <activity
             android:name=".InfoActivity"
             android:label="@string/title_activity_info"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ViewHistoryActivity"
+            android:label="@string/title_activity_view_history"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

@@ -47,7 +47,6 @@ public class ApiService extends Service {
             protected String doInBackground(Double... params) {
 
                 //Specify the query for Google
-                //String endpoint = String.format("https://maps.googleapis.com/maps/api/elevation/json?locations=%s,%s&key=%s", latitude, longitude, API_KEY);
                 String endpoint = String.format(url, latitude, longitude, API_KEY);
 
                 try {
