@@ -5,8 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/mountain"
-    android:backgroundTint="#d09bff"
-    android:backgroundTintMode="multiply"
     android:padding="10dp"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -14,7 +12,9 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.mountineer.mountaineer.MainActivity"
-    tools:showIn="@layout/activity_main">
+    tools:showIn="@layout/activity_main"
+    android:backgroundTint="#d09bff"
+    android:backgroundTintMode="multiply">
 
 
     <TextView
@@ -61,7 +61,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/txtMetersAboveSeaLabel"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal">
 
 
@@ -127,9 +127,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:contentDescription="@string/refreshText"
         android:src="@drawable/ic_refresh_white_24dp"
-        android:tint="@color/lightText" />
+        android:tint="@color/lightText"
+        android:contentDescription="@string/refreshText" />
 
     <ImageView
         android:id="@+id/imgInfo"
@@ -138,25 +138,27 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:contentDescription="@string/infoText"
         android:src="@drawable/ic_info_white_24dp"
-        android:tint="@color/lightText" />
+        android:tint="@color/lightText"
+        android:contentDescription="@string/infoText" />
 
     <Button
         android:id="@+id/btnHistory"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
+        android:text="@string/historyButtonText"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="@string/historyButtonText" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:id="@+id/btnSaveLocation"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_above="@id/btnHistory"
-        android:layout_centerHorizontal="true"
-        android:text="@string/saveLocationButtonText" />
+        android:text="@string/saveLocationButtonText"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 
 </RelativeLayout>
