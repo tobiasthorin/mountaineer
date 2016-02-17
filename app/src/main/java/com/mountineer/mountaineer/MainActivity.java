@@ -121,12 +121,18 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 String location = txtLocation.getText().toString();
                 String altitude = txtElevation.getText().toString();
 
-                Boolean isInsert = databaseHelper.insertData(date, location, altitude);
+                int isInsert = databaseHelper.insertData(date, location, altitude);
 
-                if (isInsert) {
-                    Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                switch (isInsert) {
+                    case DatabaseHelper.INSERTION_SUCCESS:
+                        Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
+                        break;
+                    case DatabaseHelper.INSERTION_FAILURE:
+                        Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                        break;
+                    case DatabaseHelper.INSERTION_DUPLICATE:
+                        Toast.makeText(getApplicationContext(), "Location already saved", Toast.LENGTH_SHORT).show();
+                        break;
                 }
             }
         });

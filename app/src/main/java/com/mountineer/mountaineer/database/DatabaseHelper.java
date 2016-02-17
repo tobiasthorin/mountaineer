@@ -11,33 +11,69 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
+    //Error codes
+    public static final int INSERTION_SUCCESS = 1;
+    public static final int INSERTION_DUPLICATE = 2;
+    public static final int INSERTION_FAILURE = -1;
+
+    //Database variables
     public static final String DATABASE_NAME = "Mountaineer.db";
     public static final int DATABASE_VERSION = 1;
     public static final String TABLE_NAME = "location_history";
+
+    private SQLiteDatabase db;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    public boolean insertData(String date, String location, String altitude) {
-        SQLiteDatabase db = this.getWritableDatabase();
+    public int insertData(String date, String location, String altitude) {
 
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("DATE", date);
-        contentValues.put("LOCATION", location);
-        contentValues.put("ALTITUDE", altitude);
+        db = this.getWritableDatabase();
 
-        long result = db.insert(TABLE_NAME, null, contentValues);
+        //Check for duplicate
+        boolean entryExists = checkForDuplicate(new String[] {"DATE", "LOCATION", "ALTITUDE"}, new String[] {date, location, altitude});
 
-        if (result == -1) {
-            return false;
+        if (entryExists) {
+            return INSERTION_DUPLICATE;
         } else {
-            return true;
+
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("DATE", date);
+            contentValues.put("LOCATION", location);
+            contentValues.put("ALTITUDE", altitude);
+
+            long result = db.insert(TABLE_NAME, null, contentValues);
+
+            if (result == -1) {
+                return INSERTION_FAILURE;
+            } else {
+                return INSERTION_SUCCESS;
+            }
         }
     }
 
+    private boolean checkForDuplicate(String[] keys, String[] values) {
+
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < keys.length; i++) {
+            sb.append(keys[i])
+                    .append("=\"")
+                    .append(values[i])
+                    .append("\" ");
+            if (i<keys.length-1) sb.append("AND ");
+        }
+
+        Cursor cursor = db.query(TABLE_NAME, null, sb.toString(), null, null, null, null);
+
+        boolean result = cursor.getCount() > 0;
+        cursor.close();
+        return result;
+    }
+
     public Cursor getAllData() {
-        SQLiteDatabase db = this.getWritableDatabase();
+        db = this.getWritableDatabase();
         return db.rawQuery("select * from " + TABLE_NAME, null);
     }
 
