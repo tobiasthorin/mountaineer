@@ -28,6 +28,17 @@ public class LocationAdapter extends ArrayAdapter {
         mountaineerLocationList.add(mountaineerLocation);
     }
 
+    public void sort(){
+
+        ArrayList<MountaineerLocation> sortedList = new ArrayList<>();
+
+        for (int i = mountaineerLocationList.size() - 1; i >= 0; i--){
+            sortedList.add(mountaineerLocationList.get(i));
+        }
+
+        mountaineerLocationList = sortedList;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 

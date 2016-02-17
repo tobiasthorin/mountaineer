@@ -30,6 +30,7 @@ public class ViewHistoryActivity extends AppCompatActivity {
 
         //populate the list in the helper with data from the database
         populateList();
+        locationAdapter.sort();
 
         //set the list view to use the now populated adapter
         lvHistory.setAdapter(locationAdapter);
@@ -38,11 +39,13 @@ public class ViewHistoryActivity extends AppCompatActivity {
     private void populateList() {
         Cursor allData = databaseHelper.getAllData();
 
+        //Check if there is data in our cursor
         if (allData.getCount() < 1) {
             displayErrorMessage("Error", "No items in database");
             return;
         }
 
+        //Put each item from the database into the adapter
         while (allData.moveToNext()) {
             String id = allData.getString(0);
             String date = allData.getString(1);
@@ -53,14 +56,13 @@ public class ViewHistoryActivity extends AppCompatActivity {
         }
     }
 
+    //Make an error message and show it
     private void displayErrorMessage(String title, String message) {
-
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(title);
         builder.setMessage(message);
         builder.setCancelable(true);
         builder.show();
-
     }
 }
