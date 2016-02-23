@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +29,7 @@ import com.mountineer.mountaineer.service.LocationServiceCallback;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
 
@@ -143,14 +145,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         //Get location manager
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        //Request location for both network and gps
-        try {
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        }
-
         //Create urls for api calls
         String elevationUrl = "https://maps.googleapis.com/maps/api/elevation/json?locations=%s,%s&key=%s";
         String locationUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng=%s,%s&key=%s";
@@ -164,6 +158,33 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         locationApiService = new ApiService(locationServiceCallback, locationUrl);
 
         updateLocationAndElevation();
+    }
+
+    private Location getLastLocation() {
+
+        Location returnLocation = null;
+
+        //Find all the possible providers...
+        List<String> providers = locationManager.getProviders(true);
+
+        //...and try to get the location from every single one
+        for (String provider : providers) {
+
+            Location testLocation = null;
+
+            try {
+                testLocation = locationManager.getLastKnownLocation(provider);
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            }
+
+            if (returnLocation == null || testLocation.getAccuracy() > returnLocation.getAccuracy()) {
+                returnLocation = testLocation;
+                Log.d("Provider", returnLocation.getProvider());
+            }
+        }
+
+        return returnLocation;
     }
 
     private String findCurrentDate() {
@@ -181,15 +202,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     //Updates the text fields in the main interface
     private void updateLocationAndElevation() {
 
-
-        try {
-            //Set a criteria (default) for choosing provider, then get the location!
-            Criteria criteria = new Criteria();
-            provider = locationManager.getBestProvider(criteria, false);
-            currentLocation = locationManager.getLastKnownLocation(provider);
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        }
+        currentLocation = getLastLocation();
 
         //Set location fields
         double lat = currentLocation.getLatitude();
