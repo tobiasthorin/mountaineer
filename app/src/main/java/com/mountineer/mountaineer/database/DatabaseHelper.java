@@ -14,6 +14,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //Error codes
     public static final int INSERTION_SUCCESS = 1;
     public static final int INSERTION_DUPLICATE = 2;
+    public static final int INSERTION_INCOMPLETE = 3;
     public static final int INSERTION_FAILURE = -1;
 
     //Database variables
@@ -34,8 +35,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //Check for duplicate
         boolean entryExists = checkForDuplicate(new String[] {"DATE", "LOCATION", "ALTITUDE"}, new String[] {date, location, altitude});
 
+        boolean entryIsVoid = date == "N/A" || location == "N/A" || altitude == "N/A";
+
         if (entryExists) {
             return INSERTION_DUPLICATE;
+        } else if (entryIsVoid) {
+            return INSERTION_INCOMPLETE;
         } else {
 
             ContentValues contentValues = new ContentValues();

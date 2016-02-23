@@ -135,6 +135,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                     case DatabaseHelper.INSERTION_DUPLICATE:
                         Toast.makeText(getApplicationContext(), "Location already saved", Toast.LENGTH_SHORT).show();
                         break;
+                    case DatabaseHelper.INSERTION_INCOMPLETE:
+                        Toast.makeText(getApplicationContext(), "Unable to save, no data", Toast.LENGTH_SHORT).show();
+                        break;
                 }
             }
         });
